@@ -1,0 +1,407 @@
+{
+  "connection": {
+    "connected": true,
+    "text": "Connected"
+  },
+  "me": {
+    "displayName": "Alice",
+    "view": {
+      "headline": "Other activity",
+      "app": "Cursor",
+      "detail": null,
+      "tone": "other"
+    },
+    "source": "Cursor: matched a default category.",
+    "visible": "Other activity · Cursor",
+    "paused": false,
+    "pending": {
+      "view": {
+        "headline": "Working",
+        "app": null,
+        "detail": null,
+        "tone": "work"
+      },
+      "remainingMs": 7000,
+      "totalSeconds": 10,
+      "full": "Category: Work\nApp: Cursor\nTitle: plan.md - idea1 - Cursor"
+    },
+    "meta": "For 1 min",
+    "full": "Category: Other\nApp: Cursor\nTitle: roadmap.md - idea1 - Cursor",
+    "userId": "00000000-0000-0000-0000-00000000a11c",
+    "client": "windows"
+  },
+  "rooms": [
+    {
+      "id": "00000000-0000-0000-0000-0000000000a1",
+      "name": "测试房间",
+      "isOwner": true,
+      "memberCount": 3,
+      "maxMembers": 20,
+      "onlineCount": 2,
+      "joined": "Joined Nov 8"
+    },
+    {
+      "id": "00000000-0000-0000-0000-0000000000a2",
+      "name": "同事房间",
+      "isOwner": false,
+      "memberCount": 2,
+      "maxMembers": 20,
+      "onlineCount": null,
+      "joined": "Joined Nov 7"
+    }
+  ],
+  "selectedRoomId": "00000000-0000-0000-0000-0000000000a1",
+  "emptyHint": null,
+  "members": [
+    {
+      "userId": "00000000-0000-0000-0000-000000000b0b",
+      "name": "Bob",
+      "isOwner": false,
+      "online": true,
+      "view": {
+        "headline": "Watching videos",
+        "app": "哔哩哔哩",
+        "detail": "【4K】猫猫合集：一只橘猫从早到晚的完整一天，附带三只小猫的成长记录和…",
+        "tone": "relax"
+      },
+      "meta": "For 12 min",
+      "pinned": true,
+      "blocked": false,
+      "shareStats": true,
+      "client": "mac",
+      "joined": "Joined Nov 9",
+      "trailing": false
+    },
+    {
+      "userId": "00000000-0000-0000-0000-0000000ca201",
+      "name": "Carol",
+      "isOwner": false,
+      "online": false,
+      "view": {
+        "headline": "Offline",
+        "app": null,
+        "detail": null,
+        "tone": "offline"
+      },
+      "meta": "",
+      "pinned": false,
+      "blocked": false,
+      "shareStats": false,
+      "client": null,
+      "joined": "Joined Nov 10",
+      "trailing": true
+    }
+  ],
+  "privacy": {
+    "rows": [
+      {
+        "category": "Work",
+        "name": "Work",
+        "level": "StateOnly"
+      },
+      {
+        "category": "Communication",
+        "name": "Chat",
+        "level": "StateOnly"
+      },
+      {
+        "category": "Video",
+        "name": "Video",
+        "level": "Category"
+      },
+      {
+        "category": "Game",
+        "name": "Games",
+        "level": "Category"
+      },
+      {
+        "category": "Browsing",
+        "name": "Web browsing",
+        "level": "Category"
+      },
+      {
+        "category": "Other",
+        "name": "Other",
+        "level": "Category"
+      }
+    ],
+    "levels": [
+      {
+        "value": "StateOnly",
+        "name": "Category only"
+      },
+      {
+        "value": "Category",
+        "name": "Include app"
+      },
+      {
+        "value": "Detail",
+        "name": "Include titles"
+      }
+    ],
+    "shareStats": true,
+    "statsDays": 7,
+    "dayOptions": [
+      {
+        "value": 1,
+        "name": "1 day"
+      },
+      {
+        "value": 3,
+        "name": "3 days"
+      },
+      {
+        "value": 7,
+        "name": "7 days"
+      },
+      {
+        "value": 30,
+        "name": "30 days"
+      }
+    ],
+    "sharePausedStats": false
+  },
+  "correction": {
+    "target": "Cursor",
+    "current": "Work",
+    "options": [
+      {
+        "value": "Work",
+        "name": "Work"
+      },
+      {
+        "value": "Communication",
+        "name": "Chat"
+      },
+      {
+        "value": "Video",
+        "name": "Video"
+      },
+      {
+        "value": "Game",
+        "name": "Games"
+      },
+      {
+        "value": "Browsing",
+        "name": "Web browsing"
+      },
+      {
+        "value": "Other",
+        "name": "Other"
+      }
+    ],
+    "personal": false,
+    "title": "plan.md - idea1 - Cursor",
+    "keyword": null
+  },
+  "settings": {
+    "autoStart": true,
+    "topmost": false,
+    "receiveBeta": true,
+    "updateReady": false,
+    "version": "0.1.1-dev.12",
+    "userName": "alice",
+    "updateActivity": null,
+    "shareUsage": true,
+    "theme": "system",
+    "closeAction": "ask",
+    "language": "system",
+    "isAdmin": true,
+    "idleMinutes": 5,
+    "switchDelaySeconds": 10,
+    "personal": {
+      "accountSync": false,
+      "folder": null,
+      "folderUnavailable": false
+    },
+    "plugins": {
+      "items": [
+        {
+          "id": "user:qq-chat.ps1",
+          "name": "QQ 会话",
+          "version": "0.1",
+          "official": false,
+          "enabled": true,
+          "provides": [
+            "detail"
+          ],
+          "owns": [
+            "detail"
+          ],
+          "state": "running",
+          "notes": [],
+          "actions": [],
+          "apps": [
+            "QQ"
+          ]
+        },
+        {
+          "id": "user:vscode-title.ps1",
+          "name": "VS Code 标题",
+          "version": "0.2",
+          "official": false,
+          "enabled": true,
+          "provides": [
+            "foreground"
+          ],
+          "owns": [
+            "foreground"
+          ],
+          "state": "running",
+          "notes": [],
+          "actions": [],
+          "apps": []
+        },
+        {
+          "id": "user:spotify.py",
+          "name": "spotify.py",
+          "version": null,
+          "official": false,
+          "enabled": false,
+          "provides": [
+            "foreground",
+            "domain"
+          ],
+          "owns": [],
+          "state": "disabled",
+          "notes": [],
+          "actions": [],
+          "apps": []
+        },
+        {
+          "id": "user:broken.cmd",
+          "name": "broken.cmd",
+          "version": null,
+          "official": false,
+          "enabled": true,
+          "provides": [
+            "media"
+          ],
+          "owns": [],
+          "state": "failed",
+          "notes": [
+            {
+              "key": "plugin.error",
+              "text": "exit code 1",
+              "tone": "warn"
+            }
+          ],
+          "actions": [],
+          "apps": []
+        },
+        {
+          "id": "official:windows",
+          "name": "Windows",
+          "version": null,
+          "official": true,
+          "enabled": true,
+          "provides": [
+            "foreground",
+            "domain",
+            "idle",
+            "lock",
+            "media"
+          ],
+          "owns": [
+            "domain",
+            "idle",
+            "lock",
+            "media"
+          ],
+          "state": "running",
+          "notes": [],
+          "actions": [],
+          "apps": []
+        }
+      ],
+      "unprovided": [],
+      "folder": "C:\\Users\\alice\\AppData\\Roaming\\DeskPal\\plugins"
+    }
+  },
+  "myRules": [
+    {
+      "kind": "AppTitle",
+      "pattern": "qq/项目组",
+      "name": "QQ",
+      "kindName": "Title contains",
+      "category": "Work",
+      "categoryName": "Work",
+      "shown": "项目组"
+    },
+    {
+      "kind": "Domain",
+      "pattern": "bilibili.com",
+      "name": "哔哩哔哩",
+      "kindName": "Website",
+      "category": "Video",
+      "categoryName": "Video",
+      "shown": "bilibili.com"
+    },
+    {
+      "kind": "Process",
+      "pattern": "wechat",
+      "name": "微信",
+      "kindName": "App",
+      "category": "Work",
+      "categoryName": "Work",
+      "shown": "wechat"
+    }
+  ],
+  "unclassified": [
+    {
+      "kind": "Process",
+      "pattern": "xmind",
+      "name": "XMind",
+      "today": "Today: 42 min"
+    },
+    {
+      "kind": "Process",
+      "pattern": "snipaste",
+      "name": "Snipaste",
+      "today": "Today: 7 min"
+    }
+  ],
+  "whatsNew": null,
+  "usage": {
+    "viewers": [
+      {
+        "name": "Bob",
+        "room": "测试房间",
+        "when": "Today 13:00"
+      },
+      {
+        "name": "Dave",
+        "room": "同事房间",
+        "when": "Yesterday 12:00"
+      }
+    ],
+    "sync": {
+      "enabled": false,
+      "needsPin": false,
+      "error": null
+    },
+    "folder": {
+      "enabled": false,
+      "path": null,
+      "unavailable": false
+    }
+  },
+  "locale": "en",
+  "noTitleRules": [
+    {
+      "kind": "App",
+      "pattern": "招商银行",
+      "label": "App · 招商银行"
+    },
+    {
+      "kind": "Domain",
+      "pattern": "cmbchina.com",
+      "label": "Site · cmbchina.com"
+    },
+    {
+      "kind": "Title",
+      "pattern": "病历",
+      "label": "Title contains · 病历"
+    }
+  ]
+}

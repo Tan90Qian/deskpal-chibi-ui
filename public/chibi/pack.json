@@ -1,0 +1,592 @@
+{
+  "schemaVersion": 2,
+  "name": "CrossPet Chibi AI Pack",
+  "license": "CC BY-NC-SA 4.0 (CrossPet & community creators — non-commercial)",
+  "miniFrames": [
+    "idle",
+    "happy",
+    "sleep",
+    "run-a",
+    "run-b",
+    "run-c",
+    "wave",
+    "read",
+    "worried",
+    "think-a",
+    "think-b",
+    "notes",
+    "carry-a",
+    "carry-b",
+    "carry-c",
+    "point",
+    "gift",
+    "move-a",
+    "move-b",
+    "move-c"
+  ],
+  "characters": [
+    {
+      "id": "gemini",
+      "name": "Gemini",
+      "tag": "星空猫猫",
+      "accent": "#7b5cd6",
+      "base": true,
+      "avatar": "chibi/gemini/avatar.webp",
+      "mini": "chibi/gemini/mini.webp",
+      "blink": null,
+      "pools": {
+        "idle": [
+          "chibi/gemini/idle.webp",
+          "chibi/gemini/idle-2.webp",
+          "chibi/gemini/idle-3.webp",
+          "chibi/gemini/stretch.webp"
+        ],
+        "work": [
+          "chibi/gemini/writing.webp",
+          "chibi/gemini/thinking.webp",
+          "chibi/gemini/running.webp"
+        ],
+        "browse": [
+          "chibi/gemini/searching.webp",
+          "chibi/gemini/reading.webp"
+        ],
+        "chat": [
+          "chibi/gemini/listening.webp",
+          "chibi/gemini/hum.webp",
+          "chibi/gemini/happy.webp"
+        ],
+        "relax": [
+          "chibi/gemini/happy.webp",
+          "chibi/gemini/proud.webp",
+          "chibi/gemini/hum.webp"
+        ],
+        "away": [
+          "chibi/gemini/sleeping.webp",
+          "chibi/gemini/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "claude",
+      "name": "Claude",
+      "tag": "橙花书娘",
+      "accent": "#e8a33d",
+      "base": true,
+      "avatar": "chibi/claude/avatar.webp",
+      "mini": "chibi/claude/mini.webp",
+      "blink": "chibi/claude/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/claude/idle.webp",
+          "chibi/claude/idle-2.webp",
+          "chibi/claude/idle-3.webp",
+          "chibi/claude/stretch.webp"
+        ],
+        "work": [
+          "chibi/claude/writing.webp",
+          "chibi/claude/thinking.webp",
+          "chibi/claude/running.webp"
+        ],
+        "browse": [
+          "chibi/claude/searching.webp",
+          "chibi/claude/reading-2.webp"
+        ],
+        "chat": [
+          "chibi/claude/listening.webp",
+          "chibi/claude/hum.webp",
+          "chibi/claude/happy-2.webp"
+        ],
+        "relax": [
+          "chibi/claude/happy-2.webp",
+          "chibi/claude/proud.webp",
+          "chibi/claude/hum.webp"
+        ],
+        "away": [
+          "chibi/claude/sleeping-2.webp",
+          "chibi/claude/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek",
+      "tag": "大肥鱼女仆",
+      "accent": "#3b5bb5",
+      "base": true,
+      "avatar": "chibi/deepseek/avatar.webp",
+      "mini": "chibi/deepseek/mini.webp",
+      "blink": "chibi/deepseek/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/deepseek/idle.webp",
+          "chibi/deepseek/idle-2.webp",
+          "chibi/deepseek/idle-3.webp",
+          "chibi/deepseek/stretch.webp"
+        ],
+        "work": [
+          "chibi/deepseek/writing.webp",
+          "chibi/deepseek/thinking.webp",
+          "chibi/deepseek/running.webp"
+        ],
+        "browse": [
+          "chibi/deepseek/searching.webp",
+          "chibi/deepseek/reading.webp"
+        ],
+        "chat": [
+          "chibi/deepseek/listening.webp",
+          "chibi/deepseek/hum.webp",
+          "chibi/deepseek/happy.webp"
+        ],
+        "relax": [
+          "chibi/deepseek/happy.webp",
+          "chibi/deepseek/proud.webp",
+          "chibi/deepseek/hum.webp"
+        ],
+        "away": [
+          "chibi/deepseek/sleeping.webp",
+          "chibi/deepseek/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "gpt",
+      "name": "GPT",
+      "tag": "御姐白龙",
+      "accent": "#7a8fa8",
+      "base": true,
+      "avatar": "chibi/gpt/avatar.webp",
+      "mini": "chibi/gpt/mini.webp",
+      "blink": "chibi/gpt/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/gpt/idle.webp",
+          "chibi/gpt/idle-2.webp",
+          "chibi/gpt/idle-3.webp",
+          "chibi/gpt/stretch.webp"
+        ],
+        "work": [
+          "chibi/gpt/writing.webp",
+          "chibi/gpt/thinking.webp",
+          "chibi/gpt/running.webp"
+        ],
+        "browse": [
+          "chibi/gpt/searching.webp",
+          "chibi/gpt/reading.webp"
+        ],
+        "chat": [
+          "chibi/gpt/listening.webp",
+          "chibi/gpt/hum.webp",
+          "chibi/gpt/happy.webp"
+        ],
+        "relax": [
+          "chibi/gpt/happy.webp",
+          "chibi/gpt/proud.webp",
+          "chibi/gpt/hum.webp"
+        ],
+        "away": [
+          "chibi/gpt/sleeping.webp",
+          "chibi/gpt/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "glm",
+      "name": "GLM",
+      "tag": "黑狐女仆",
+      "accent": "#4b5a8a",
+      "base": true,
+      "avatar": "chibi/glm/avatar.webp",
+      "mini": "chibi/glm/mini.webp",
+      "blink": "chibi/glm/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/glm/idle.webp",
+          "chibi/glm/idle-2.webp",
+          "chibi/glm/idle-3.webp",
+          "chibi/glm/stretch.webp"
+        ],
+        "work": [
+          "chibi/glm/writing.webp",
+          "chibi/glm/thinking.webp",
+          "chibi/glm/running.webp"
+        ],
+        "browse": [
+          "chibi/glm/searching.webp",
+          "chibi/glm/reading.webp"
+        ],
+        "chat": [
+          "chibi/glm/listening.webp",
+          "chibi/glm/hum.webp",
+          "chibi/glm/happy.webp"
+        ],
+        "relax": [
+          "chibi/glm/happy.webp",
+          "chibi/glm/proud.webp",
+          "chibi/glm/hum.webp"
+        ],
+        "away": [
+          "chibi/glm/sleeping.webp",
+          "chibi/glm/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "kimi",
+      "name": "Kimi",
+      "tag": "月光乐手",
+      "accent": "#3a4a9c",
+      "base": true,
+      "avatar": "chibi/kimi/avatar.webp",
+      "mini": "chibi/kimi/mini.webp",
+      "blink": "chibi/kimi/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/kimi/idle.webp",
+          "chibi/kimi/stretch.webp"
+        ],
+        "work": [
+          "chibi/kimi/writing.webp",
+          "chibi/kimi/thinking.webp",
+          "chibi/kimi/running.webp"
+        ],
+        "browse": [
+          "chibi/kimi/searching.webp",
+          "chibi/kimi/reading.webp"
+        ],
+        "chat": [
+          "chibi/kimi/listening.webp",
+          "chibi/kimi/hum.webp",
+          "chibi/kimi/happy.webp"
+        ],
+        "relax": [
+          "chibi/kimi/happy.webp",
+          "chibi/kimi/proud.webp",
+          "chibi/kimi/hum.webp"
+        ],
+        "away": [
+          "chibi/kimi/sleeping.webp",
+          "chibi/kimi/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "qwen",
+      "name": "Qwen",
+      "tag": "国风千金",
+      "accent": "#5b6bd6",
+      "base": true,
+      "avatar": "chibi/qwen/avatar.webp",
+      "mini": "chibi/qwen/mini.webp",
+      "blink": "chibi/qwen/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/qwen/idle.webp",
+          "chibi/qwen/idle-2.webp",
+          "chibi/qwen/idle-3.webp",
+          "chibi/qwen/stretch.webp"
+        ],
+        "work": [
+          "chibi/qwen/writing.webp",
+          "chibi/qwen/thinking.webp",
+          "chibi/qwen/running.webp"
+        ],
+        "browse": [
+          "chibi/qwen/searching.webp",
+          "chibi/qwen/reading.webp"
+        ],
+        "chat": [
+          "chibi/qwen/listening.webp",
+          "chibi/qwen/hum.webp",
+          "chibi/qwen/happy.webp"
+        ],
+        "relax": [
+          "chibi/qwen/happy.webp",
+          "chibi/qwen/proud.webp",
+          "chibi/qwen/hum.webp"
+        ],
+        "away": [
+          "chibi/qwen/sleeping.webp",
+          "chibi/qwen/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "grok",
+      "name": "Grok",
+      "tag": "哥特小恶魔",
+      "accent": "#c19a3a",
+      "base": true,
+      "avatar": "chibi/grok/avatar.webp",
+      "mini": "chibi/grok/mini.webp",
+      "blink": "chibi/grok/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/grok/idle.webp",
+          "chibi/grok/idle-2.webp",
+          "chibi/grok/idle-3.webp",
+          "chibi/grok/stretch.webp"
+        ],
+        "work": [
+          "chibi/grok/writing.webp",
+          "chibi/grok/thinking.webp",
+          "chibi/grok/running.webp"
+        ],
+        "browse": [
+          "chibi/grok/searching.webp",
+          "chibi/grok/reading.webp"
+        ],
+        "chat": [
+          "chibi/grok/listening.webp",
+          "chibi/grok/hum.webp",
+          "chibi/grok/happy.webp"
+        ],
+        "relax": [
+          "chibi/grok/happy.webp",
+          "chibi/grok/proud.webp",
+          "chibi/grok/hum.webp"
+        ],
+        "away": [
+          "chibi/grok/sleeping.webp",
+          "chibi/grok/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "doubao",
+      "name": "豆包",
+      "tag": "生活小帮手",
+      "accent": "#6a5ad8",
+      "base": true,
+      "avatar": "chibi/doubao/avatar.webp",
+      "mini": "chibi/doubao/mini.webp",
+      "blink": "chibi/doubao/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/doubao/idle.webp",
+          "chibi/doubao/stretch.webp"
+        ],
+        "work": [
+          "chibi/doubao/writing.webp",
+          "chibi/doubao/thinking.webp",
+          "chibi/doubao/running.webp"
+        ],
+        "browse": [
+          "chibi/doubao/searching.webp",
+          "chibi/doubao/reading.webp"
+        ],
+        "chat": [
+          "chibi/doubao/listening.webp",
+          "chibi/doubao/hum.webp",
+          "chibi/doubao/happy.webp"
+        ],
+        "relax": [
+          "chibi/doubao/happy.webp",
+          "chibi/doubao/proud.webp",
+          "chibi/doubao/hum.webp"
+        ],
+        "away": [
+          "chibi/doubao/sleeping.webp",
+          "chibi/doubao/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "gemini-magician",
+      "name": "魔术师 Gemini",
+      "tag": "限定皮肤",
+      "accent": "#7b5cd6",
+      "base": false,
+      "avatar": "chibi/gemini-magician/portrait.webp",
+      "mini": "chibi/gemini-magician/mini.webp",
+      "blink": "chibi/gemini-magician/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/gemini-magician/idle.webp",
+          "chibi/gemini-magician/stretch.webp"
+        ],
+        "work": [
+          "chibi/gemini-magician/writing.webp",
+          "chibi/gemini-magician/thinking.webp",
+          "chibi/gemini-magician/running.webp"
+        ],
+        "browse": [
+          "chibi/gemini-magician/searching.webp",
+          "chibi/gemini-magician/reading.webp"
+        ],
+        "chat": [
+          "chibi/gemini-magician/listening.webp",
+          "chibi/gemini-magician/hum.webp",
+          "chibi/gemini-magician/happy.webp"
+        ],
+        "relax": [
+          "chibi/gemini-magician/happy.webp",
+          "chibi/gemini-magician/proud.webp",
+          "chibi/gemini-magician/hum.webp"
+        ],
+        "away": [
+          "chibi/gemini-magician/sleeping.webp",
+          "chibi/gemini-magician/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "claude-saint",
+      "name": "圣女 Claude",
+      "tag": "限定皮肤",
+      "accent": "#7b5cd6",
+      "base": false,
+      "avatar": "chibi/claude-saint/portrait.webp",
+      "mini": "chibi/claude-saint/mini.webp",
+      "blink": "chibi/claude-saint/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/claude-saint/idle.webp",
+          "chibi/claude-saint/idle-2.webp",
+          "chibi/claude-saint/stretch.webp"
+        ],
+        "work": [
+          "chibi/claude-saint/writing.webp",
+          "chibi/claude-saint/thinking.webp",
+          "chibi/claude-saint/running.webp"
+        ],
+        "browse": [
+          "chibi/claude-saint/searching.webp",
+          "chibi/claude-saint/reading.webp"
+        ],
+        "chat": [
+          "chibi/claude-saint/listening.webp",
+          "chibi/claude-saint/hum.webp",
+          "chibi/claude-saint/happy.webp"
+        ],
+        "relax": [
+          "chibi/claude-saint/happy.webp",
+          "chibi/claude-saint/proud.webp",
+          "chibi/claude-saint/hum.webp"
+        ],
+        "away": [
+          "chibi/claude-saint/sleeping.webp",
+          "chibi/claude-saint/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "deepseek-pajamas",
+      "name": "睡衣 DeepSeek",
+      "tag": "限定皮肤",
+      "accent": "#7b5cd6",
+      "base": false,
+      "avatar": "chibi/deepseek-pajamas/portrait.webp",
+      "mini": "chibi/deepseek-pajamas/mini.webp",
+      "blink": "chibi/deepseek-pajamas/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/deepseek-pajamas/idle.webp",
+          "chibi/deepseek-pajamas/stretch.webp"
+        ],
+        "work": [
+          "chibi/deepseek-pajamas/writing.webp",
+          "chibi/deepseek-pajamas/thinking.webp",
+          "chibi/deepseek-pajamas/running.webp"
+        ],
+        "browse": [
+          "chibi/deepseek-pajamas/searching.webp",
+          "chibi/deepseek-pajamas/reading.webp"
+        ],
+        "chat": [
+          "chibi/deepseek-pajamas/listening.webp",
+          "chibi/deepseek-pajamas/hum.webp",
+          "chibi/deepseek-pajamas/happy.webp"
+        ],
+        "relax": [
+          "chibi/deepseek-pajamas/happy.webp",
+          "chibi/deepseek-pajamas/proud.webp",
+          "chibi/deepseek-pajamas/hum.webp"
+        ],
+        "away": [
+          "chibi/deepseek-pajamas/sleeping.webp",
+          "chibi/deepseek-pajamas/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "deepseek-hoodie",
+      "name": "卫衣 DeepSeek",
+      "tag": "限定皮肤",
+      "accent": "#7b5cd6",
+      "base": false,
+      "avatar": "chibi/deepseek-hoodie/portrait.webp",
+      "mini": "chibi/deepseek-hoodie/mini.webp",
+      "blink": "chibi/deepseek-hoodie/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/deepseek-hoodie/idle.webp",
+          "chibi/deepseek-hoodie/stretch.webp"
+        ],
+        "work": [
+          "chibi/deepseek-hoodie/writing.webp",
+          "chibi/deepseek-hoodie/thinking.webp",
+          "chibi/deepseek-hoodie/running.webp"
+        ],
+        "browse": [
+          "chibi/deepseek-hoodie/searching.webp",
+          "chibi/deepseek-hoodie/reading.webp"
+        ],
+        "chat": [
+          "chibi/deepseek-hoodie/listening.webp",
+          "chibi/deepseek-hoodie/hum.webp",
+          "chibi/deepseek-hoodie/happy.webp"
+        ],
+        "relax": [
+          "chibi/deepseek-hoodie/happy.webp",
+          "chibi/deepseek-hoodie/proud.webp",
+          "chibi/deepseek-hoodie/hum.webp"
+        ],
+        "away": [
+          "chibi/deepseek-hoodie/sleeping.webp",
+          "chibi/deepseek-hoodie/yawn.webp"
+        ]
+      }
+    },
+    {
+      "id": "gpt-onesie",
+      "name": "龙崽 GPT",
+      "tag": "限定皮肤",
+      "accent": "#7b5cd6",
+      "base": false,
+      "avatar": "chibi/gpt-onesie/portrait.webp",
+      "mini": "chibi/gpt-onesie/mini.webp",
+      "blink": "chibi/gpt-onesie/idle-blink.webp",
+      "pools": {
+        "idle": [
+          "chibi/gpt-onesie/idle.webp",
+          "chibi/gpt-onesie/idle-2.webp",
+          "chibi/gpt-onesie/idle-3.webp",
+          "chibi/gpt-onesie/stretch.webp"
+        ],
+        "work": [
+          "chibi/gpt-onesie/writing.webp",
+          "chibi/gpt-onesie/thinking.webp",
+          "chibi/gpt-onesie/running.webp"
+        ],
+        "browse": [
+          "chibi/gpt-onesie/searching.webp",
+          "chibi/gpt-onesie/reading.webp"
+        ],
+        "chat": [
+          "chibi/gpt-onesie/listening.webp",
+          "chibi/gpt-onesie/hum.webp",
+          "chibi/gpt-onesie/happy.webp"
+        ],
+        "relax": [
+          "chibi/gpt-onesie/happy.webp",
+          "chibi/gpt-onesie/proud.webp",
+          "chibi/gpt-onesie/hum.webp"
+        ],
+        "away": [
+          "chibi/gpt-onesie/sleeping.webp",
+          "chibi/gpt-onesie/yawn.webp"
+        ]
+      }
+    }
+  ]
+}

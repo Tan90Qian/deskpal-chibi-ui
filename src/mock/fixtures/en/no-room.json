@@ -1,0 +1,214 @@
+{
+  "connection": {
+    "connected": true,
+    "text": "Connected"
+  },
+  "me": {
+    "displayName": "Alice",
+    "view": {
+      "headline": "Chatting",
+      "app": "QQ",
+      "detail": "理工生陷入云吸猫 (64)",
+      "tone": "chat"
+    },
+    "source": "QQ: matched your category.",
+    "visible": null,
+    "paused": false,
+    "pending": null,
+    "meta": "For 3 min",
+    "full": "Category: Chat\nApp: QQ\nTitle: 理工生陷入云吸猫 (64)",
+    "userId": "00000000-0000-0000-0000-00000000a11c",
+    "client": "windows"
+  },
+  "rooms": [],
+  "selectedRoomId": null,
+  "emptyHint": "You are not in a room. Create or choose one, or join with an invite code.",
+  "members": [],
+  "privacy": null,
+  "correction": {
+    "target": "QQ",
+    "current": "Communication",
+    "options": [
+      {
+        "value": "Work",
+        "name": "Work"
+      },
+      {
+        "value": "Communication",
+        "name": "Chat"
+      },
+      {
+        "value": "Video",
+        "name": "Video"
+      },
+      {
+        "value": "Game",
+        "name": "Games"
+      },
+      {
+        "value": "Browsing",
+        "name": "Web browsing"
+      },
+      {
+        "value": "Other",
+        "name": "Other"
+      }
+    ],
+    "personal": true,
+    "title": "Project team",
+    "keyword": "project"
+  },
+  "settings": {
+    "autoStart": true,
+    "topmost": false,
+    "receiveBeta": true,
+    "updateReady": false,
+    "version": "0.1.1-dev.12",
+    "userName": "alice",
+    "updateActivity": null,
+    "shareUsage": null,
+    "theme": "system",
+    "closeAction": "ask",
+    "language": "system",
+    "isAdmin": false,
+    "idleMinutes": 5,
+    "switchDelaySeconds": 10,
+    "personal": {
+      "accountSync": false,
+      "folder": null,
+      "folderUnavailable": false
+    },
+    "plugins": {
+      "items": [
+        {
+          "id": "user:hyprland.sh",
+          "name": "Hyprland 窗口",
+          "version": "0.3",
+          "official": false,
+          "enabled": true,
+          "provides": [
+            "foreground"
+          ],
+          "owns": [
+            "foreground"
+          ],
+          "state": "running",
+          "notes": [],
+          "actions": [],
+          "apps": []
+        },
+        {
+          "id": "user:telegram-chat.py",
+          "name": "Telegram 会话",
+          "version": "0.1",
+          "official": false,
+          "enabled": true,
+          "provides": [
+            "detail"
+          ],
+          "owns": [],
+          "state": "starting",
+          "notes": [],
+          "actions": [],
+          "apps": [
+            "telegram-desktop",
+            "Telegram"
+          ]
+        },
+        {
+          "id": "official:linux",
+          "name": "Linux",
+          "version": null,
+          "official": true,
+          "enabled": true,
+          "provides": [
+            "domain",
+            "idle",
+            "lock",
+            "media"
+          ],
+          "owns": [
+            "domain",
+            "idle",
+            "lock",
+            "media"
+          ],
+          "state": "running",
+          "notes": [
+            {
+              "key": "linux.noWindowSource",
+              "text": "Hyprland",
+              "tone": "info"
+            },
+            {
+              "key": "linux.browserMissing",
+              "text": null,
+              "tone": "warn"
+            }
+          ],
+          "actions": [
+            "linux.browserExtension"
+          ],
+          "apps": []
+        }
+      ],
+      "unprovided": [],
+      "folder": "/home/alice/.config/DeskPal/plugins"
+    }
+  },
+  "myRules": [
+    {
+      "kind": "Process",
+      "pattern": "qq",
+      "name": "QQ",
+      "kindName": "App",
+      "category": "Communication",
+      "categoryName": "Chat",
+      "shown": "qq"
+    }
+  ],
+  "unclassified": [],
+  "whatsNew": null,
+  "usage": {
+    "viewers": [
+      {
+        "name": "Bob",
+        "room": "测试房间",
+        "when": "Today 13:00"
+      },
+      {
+        "name": "Dave",
+        "room": "同事房间",
+        "when": "Yesterday 12:00"
+      }
+    ],
+    "sync": {
+      "enabled": false,
+      "needsPin": false,
+      "error": null
+    },
+    "folder": {
+      "enabled": false,
+      "path": null,
+      "unavailable": false
+    }
+  },
+  "locale": "en",
+  "noTitleRules": [
+    {
+      "kind": "App",
+      "pattern": "招商银行",
+      "label": "App · 招商银行"
+    },
+    {
+      "kind": "Domain",
+      "pattern": "cmbchina.com",
+      "label": "Site · cmbchina.com"
+    },
+    {
+      "kind": "Title",
+      "pattern": "病历",
+      "label": "Title contains · 病历"
+    }
+  ]
+}
