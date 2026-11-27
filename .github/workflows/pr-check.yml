@@ -1,0 +1,65 @@
+name: PR Verification
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install Dependencies
+        run: npm ci --no-fund --no-audit
+
+      - name: Typecheck & Build
+        id: build
+        run: npm run build
+
+      - name: Notify Feishu on Adaptation PR Ready
+        if: ${{ success() && !github.event.pull_request.draft && (startsWith(github.head_ref, 'jules') || contains(github.head_ref, 'jules') || contains(github.event.pull_request.user.login, 'jules') || contains(join(github.event.pull_request.labels.*.name, ','), 'jules')) }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          FEISHU_WEBHOOK_SECRET: ${{ secrets.FEISHU_WEBHOOK_SECRET }}
+        run: |
+          gh pr edit "${{ github.event.pull_request.html_url }}" --add-reviewer "${{ github.repository_owner }}" || true
+          node scripts/notify-feishu.mjs \
+            --status ready \
+            --title "DeskPal · Jules 适配 PR 构建通过，等待合并" \
+            --body "PR #${{ github.event.pull_request.number }}：**${{ github.event.pull_request.title }}**\n\n- \`tsc --noEmit && vite build\` 已通过 ✅\n- 请点击下方按钮审阅变更并合并。" \
+            --url "${{ github.event.pull_request.html_url }}" \
+            --button "打开 PR 并合并"
+
+      - name: Notify Feishu on PR Build Failure
+        if: ${{ failure() && !github.event.pull_request.draft && (startsWith(github.head_ref, 'sync/') || startsWith(github.head_ref, 'jules') || contains(github.head_ref, 'jules') || contains(join(github.event.pull_request.labels.*.name, ','), 'upstream-sync')) }}
+        env:
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          FEISHU_WEBHOOK_SECRET: ${{ secrets.FEISHU_WEBHOOK_SECRET }}
+        run: |
+          node scripts/notify-feishu.mjs \
+            --status error \
+            --title "DeskPal · PR #${{ github.event.pull_request.number }} 构建失败" \
+            --body "PR **${{ github.event.pull_request.title }}** 未通过 \`tsc --noEmit && vite build\` 校验，请查看日志。" \
+            --url "${{ github.event.pull_request.html_url }}" \
+            --button "查看 PR" \
+            --url2 "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --button2 "查看构建日志"

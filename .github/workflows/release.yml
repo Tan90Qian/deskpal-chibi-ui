@@ -4,10 +4,15 @@ on:
   push:
     tags:
       - "v*"
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
   workflow_dispatch:
     inputs:
       tag:
-        description: "Release tag (e.g. v0.1.0)"
+        description: "Release tag (e.g. v0.1.6-dev.2-chibi.1)"
         required: false
 
 permissions:
@@ -15,16 +20,61 @@ permissions:
 
 jobs:
   build-and-release:
+    # Run on tag push, manual dispatch, or when an upstream-sync / Jules PR is merged into main
+    if: >-
+      github.event_name != 'pull_request' ||
+      (
+        github.event.pull_request.merged == true &&
+        (
+          startsWith(github.event.pull_request.head.ref, 'sync/') ||
+          contains(github.event.pull_request.head.ref, 'jules') ||
+          contains(join(github.event.pull_request.labels.*.name, ','), 'upstream-sync')
+        )
+      )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'pull_request' && 'main' || github.ref }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
           cache: "npm"
+
+      - name: Determine Release Tag
+        id: ver
+        run: |
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            TAG="${{ github.ref_name }}"
+            SHOULD_TAG="false"
+            SHOULD_RELEASE="true"
+          elif [ -n "${{ inputs.tag }}" ]; then
+            TAG="${{ inputs.tag }}"
+            SHOULD_TAG="false"
+            SHOULD_RELEASE="false"
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_VER=$(node -e 'const s = JSON.parse(require("fs").readFileSync(".upstream-sync.json","utf8")); console.log((s.compatibleDeskPalVersion || "0.1.0").replace(/^v/i,""));')
+            REV=$(node -e 'const s = JSON.parse(require("fs").readFileSync(".upstream-sync.json","utf8")); console.log(s.skinRevision || 1);')
+            TAG="v${BASE_VER}-chibi.${REV}"
+            while git rev-parse "$TAG" >/dev/null 2>&1; do
+              REV=$((REV + 1))
+              TAG="v${BASE_VER}-chibi.${REV}"
+            done
+            SHOULD_TAG="true"
+            SHOULD_RELEASE="true"
+          else
+            TAG="v$(node -e 'console.log(JSON.parse(require("fs").readFileSync("package.json","utf8")).version)')"
+            SHOULD_TAG="false"
+            SHOULD_RELEASE="false"
+          fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "should_tag=$SHOULD_TAG" >> "$GITHUB_OUTPUT"
+          echo "should_release=$SHOULD_RELEASE" >> "$GITHUB_OUTPUT"
+          echo "Resolved release tag: $TAG (should_tag=$SHOULD_TAG, should_release=$SHOULD_RELEASE)"
 
       - name: Install dependencies
         run: npm ci --no-fund --no-audit
@@ -34,7 +84,7 @@ jobs:
 
       - name: Package Windows Skin Zip
         env:
-          RELEASE_VERSION: ${{ inputs.tag || github.ref_name }}
+          RELEASE_VERSION: ${{ steps.ver.outputs.tag }}
         run: npm run package:release
 
       - name: Upload Build Artifact
@@ -43,9 +93,32 @@ jobs:
           name: deskpal-chibi-ui-release
           path: release/*.zip
 
+      - name: Create & Push Git Tag (Auto-Release on Sync PR Merge)
+        if: ${{ steps.ver.outputs.should_tag == 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "${{ steps.ver.outputs.tag }}" -m "Release ${{ steps.ver.outputs.tag }}"
+          git push origin "${{ steps.ver.outputs.tag }}"
+
       - name: Publish GitHub Release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: ${{ steps.ver.outputs.should_release == 'true' }}
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.ver.outputs.tag }}
           files: release/*.zip
           generate_release_notes: true
+
+      - name: Notify Feishu on Release Published
+        if: ${{ steps.ver.outputs.should_release == 'true' }}
+        env:
+          FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
+          FEISHU_WEBHOOK_SECRET: ${{ secrets.FEISHU_WEBHOOK_SECRET }}
+        run: |
+          COMPAT_VER=$(node -e 'const s = JSON.parse(require("fs").readFileSync(".upstream-sync.json","utf8")); console.log(s.compatibleDeskPalVersion || "unknown");')
+          node scripts/notify-feishu.mjs \
+            --status released \
+            --title "DeskPal 皮肤新版已发布 · ${{ steps.ver.outputs.tag }}" \
+            --body "Windows 一键安装包已自动打包并发布到 GitHub Releases 🎉\n\n- 发布版本：\`${{ steps.ver.outputs.tag }}\`\n- 适配 DeskPal 客户端版本：\`$COMPAT_VER\`" \
+            --url "https://github.com/${{ github.repository }}/releases/tag/${{ steps.ver.outputs.tag }}" \
+            --button "查看 Release"

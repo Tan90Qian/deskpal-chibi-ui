@@ -1,7 +1,8 @@
 ﻿param(
   [ValidateSet("install", "restore")]
   [string]$Mode = "install",
-  [string]$TargetDir = ""
+  [string]$TargetDir = "",
+  [switch]$Force
 )
 
 $ErrorActionPreference = "Stop"
@@ -109,6 +110,37 @@ if ($Mode -eq "restore" -and -not (Test-Path $backupDir)) {
 if ($Mode -eq "install" -and -not (Test-Path (Join-Path $sourceWeb "index.html"))) {
   Write-Host "皮肤包损坏：未找到 $sourceWeb\index.html" -ForegroundColor Red
   exit 1
+}
+
+# Check DeskPal client version compatibility against tools/manifest.json
+$manifestPath = Join-Path $scriptRoot "manifest.json"
+if ($Mode -eq "install" -and (Test-Path $manifestPath) -and (Test-Path $exePath)) {
+  try {
+    $manifest = Get-Content $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    $expectedVer = ($manifest.compatibleDeskPalVersion | Out-String).Trim()
+    $vi = (Get-Item $exePath).VersionInfo
+    $actualVer = if ($vi.ProductVersion) { $vi.ProductVersion.Trim() } elseif ($vi.FileVersion) { $vi.FileVersion.Trim() } else { "" }
+    if ($expectedVer -and $actualVer) {
+      $normExpected = $expectedVer -replace '^v', ''
+      $normActual = ($actualVer -replace '^v', '') -replace '\+.*$', ''
+      if ($normActual -eq $normExpected) {
+        Write-Host "DeskPal 版本校验通过: $normActual" -ForegroundColor Green
+      } else {
+        Write-Host ""
+        Write-Host "[版本兼容性提示]" -ForegroundColor Yellow
+        Write-Host "  当前本机 DeskPal 版本 : $normActual" -ForegroundColor Yellow
+        Write-Host "  本皮肤包已验证适配版本: $normExpected" -ForegroundColor Yellow
+        Write-Host "  DeskPal 迭代期间界面协议可能变动，跨版本安装可能出现异常（随时可用 一键还原原版.cmd 恢复）。" -ForegroundColor Yellow
+        if (-not $Force) {
+          $cont = Read-Host "是否仍要继续安装此版本皮肤？[y/N]"
+          if ($cont -notin @("y", "Y", "yes", "YES")) {
+            Write-Host "已取消安装，建议前往皮肤仓库 Releases 页面下载匹配版本。" -ForegroundColor Yellow
+            exit 0
+          }
+        }
+      }
+    }
+  } catch {}
 }
 
 function Remove-DirWithRetry {

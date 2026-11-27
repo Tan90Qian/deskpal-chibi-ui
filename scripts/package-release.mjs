@@ -22,8 +22,22 @@ fs.rmSync(stageDir, { recursive: true, force: true });
 fs.rmSync(zipPath, { force: true });
 fs.mkdirSync(path.join(stageDir, "tools"), { recursive: true });
 
-// 1. Copy built web/ output
+// 1. Copy built web/ output + write compatibility manifest
 fs.cpSync(distDir, path.join(stageDir, "web"), { recursive: true });
+const syncMetaPath = path.join(rootDir, ".upstream-sync.json");
+if (fs.existsSync(syncMetaPath)) {
+  const syncMeta = JSON.parse(fs.readFileSync(syncMetaPath, "utf-8"));
+  const manifest = {
+    skinVersion: version,
+    compatibleDeskPalVersion: syncMeta.compatibleDeskPalVersion || "",
+    upstreamTag: syncMeta.upstreamTag || "",
+    upstreamWebCommit: syncMeta.upstreamWebCommit || "",
+    builtAt: new Date().toISOString(),
+  };
+  const manifestJson = JSON.stringify(manifest, null, 2) + "\n";
+  fs.writeFileSync(path.join(stageDir, "tools", "manifest.json"), manifestJson, "utf-8");
+  fs.writeFileSync(path.join(stageDir, "web", "chibi-skin-manifest.json"), manifestJson, "utf-8");
+}
 
 // 2. Write PowerShell installer with single UTF-8 BOM + CRLF so Windows PowerShell 5.1 reads Chinese cleanly
 const ps1Raw = fs

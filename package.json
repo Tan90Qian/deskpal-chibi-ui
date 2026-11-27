@@ -8,6 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --port 4192",
     "sync:assets": "node scripts/sync-chibi-assets.mjs",
+    "sync:upstream": "node scripts/sync-upstream.mjs",
+    "notify:feishu": "node scripts/notify-feishu.mjs",
     "package:release": "node scripts/package-release.mjs",
     "apply:deskpal": "node scripts/apply-to-deskpal.mjs",
     "restore:deskpal": "node scripts/apply-to-deskpal.mjs --restore",

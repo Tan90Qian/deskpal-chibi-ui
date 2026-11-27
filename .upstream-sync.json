@@ -1,0 +1,10 @@
+{
+  "upstreamRepo": "HuLuShiLei/DeskPal",
+  "upstreamBranch": "main",
+  "upstreamWebPath": "src/DeskPal.Client/web",
+  "upstreamCommit": "49ea781bd18c789832785e2c31696ffc9ca4fb21",
+  "upstreamWebCommit": "5e9b08f08ce1f036579b4a565401f5982c5515ab",
+  "upstreamTag": "v0.1.6-dev.2",
+  "compatibleDeskPalVersion": "0.1.6-dev.2",
+  "skinRevision": 1
+}
