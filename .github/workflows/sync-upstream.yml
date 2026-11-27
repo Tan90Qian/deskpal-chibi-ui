@@ -11,14 +11,13 @@ on:
         type: boolean
         default: false
       force:
-        description: "Force sync even if upstreamWebCommit has not changed"
+        description: "Force sync & notify even if an open PR already covers this upstream commit"
         type: boolean
         default: false
 
 permissions:
   contents: write
   pull-requests: write
-  issues: write
 
 concurrency:
   group: upstream-sync
@@ -48,7 +47,7 @@ jobs:
           node scripts/notify-feishu.mjs \
             --status ready \
             --title "DeskPal 皮肤同步机器人联通测试成功" \
-            --body "GitHub Actions 已成功连接你的飞书机器人！\n\n- 仓库：\`${{ github.repository }}\`\n- 后续当上游 \`HuLuShiLei/DeskPal\` 的前端有更新时，将自动同步并在此处发送卡片提醒。" \
+            --body "GitHub Actions 已成功连接你的飞书机器人！\n\n- 仓库：\`${{ github.repository }}\`\n- 后续当上游 \`HuLuShiLei/DeskPal\` 的前端有更新时，将自动三方合并并在此处发送卡片提醒。" \
             --url "https://github.com/${{ github.repository }}/actions" \
             --button "查看 Actions"
 
@@ -62,8 +61,32 @@ jobs:
           fi
           node scripts/sync-upstream.mjs $ARGS
 
-      - name: Install Dependencies & Run Build Gate
+      - name: Deduplicate — Skip if Open PR Already Covers This Upstream Commit
         if: ${{ inputs.test_feishu != true && steps.sync.outputs.has_changes == 'true' }}
+        id: dedup
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEW_WEB_COMMIT: ${{ steps.sync.outputs.new_web_commit }}
+          FORCE_RUN: ${{ inputs.force }}
+        run: |
+          if [ "$FORCE_RUN" = "true" ]; then
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Check if any open upstream-sync PR already recorded this exact upstreamWebCommit
+          EXISTING_URL=$(gh pr list --state open --label "upstream-sync" --json url,body --jq ".[] | select((.body // \"\") | contains(\"<!-- upstream-web-commit: ${NEW_WEB_COMMIT} -->\")) | .url" | head -n 1 || true)
+          if [ -n "$EXISTING_URL" ]; then
+            echo "Open PR already covers upstreamWebCommit ${NEW_WEB_COMMIT}: ${EXISTING_URL}"
+            echo "Skipping duplicate build, push, and Feishu notification."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "existing_pr=$EXISTING_URL" >> "$GITHUB_OUTPUT"
+          else
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install Dependencies & Run Build Gate
+        if: ${{ inputs.test_feishu != true && steps.sync.outputs.has_changes == 'true' && steps.dedup.outputs.skip != 'true' }}
         id: build
         run: |
           npm ci --no-fund --no-audit
@@ -79,7 +102,7 @@ jobs:
           fi
 
       - name: Ensure Label & Push Sync Branch
-        if: ${{ inputs.test_feishu != true && steps.sync.outputs.has_changes == 'true' }}
+        if: ${{ inputs.test_feishu != true && steps.sync.outputs.has_changes == 'true' && steps.dedup.outputs.skip != 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
           BRANCH: ${{ steps.sync.outputs.branch_name }}
@@ -100,12 +123,12 @@ jobs:
           gh label create "upstream-sync" --color "0E8A16" --description "Automated upstream DeskPal web sync" --force || true
 
       - name: Case A — Open Ready-to-Merge PR & Notify Feishu (Green)
-        if: ${{ inputs.test_feishu != true && steps.sync.outputs.has_changes == 'true' && steps.sync.outputs.conflict_count == '0' && steps.build.outputs.build_ok == 'true' }}
-        id: pr_ready
+        if: ${{ inputs.test_feishu != true && steps.sync.outputs.has_changes == 'true' && steps.dedup.outputs.skip != 'true' && steps.sync.outputs.conflict_count == '0' && steps.build.outputs.build_ok == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
           BRANCH: ${{ steps.sync.outputs.branch_name }}
           NEW_TAG: ${{ steps.sync.outputs.new_tag }}
+          NEW_WEB_COMMIT: ${{ steps.sync.outputs.new_web_commit }}
           COMPAT_VER: ${{ steps.sync.outputs.compatible_version }}
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
           FEISHU_WEBHOOK_SECRET: ${{ secrets.FEISHU_WEBHOOK_SECRET }}
@@ -116,6 +139,8 @@ jobs:
             echo "### 构建验证"
             echo "- \`tsc --noEmit && vite build\`：**通过** ✅"
             echo "- 合并本 PR 到 \`main\` 后，\`Release\` 工作流会自动按兼容版本 \`$COMPAT_VER\` 打 tag 并发布新版 Windows 安装包。"
+            echo ""
+            echo "<!-- upstream-web-commit: $NEW_WEB_COMMIT -->"
           } > .sync-tmp/pr-body.md
 
           PR_URL=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url // empty')
@@ -139,17 +164,15 @@ jobs:
             --url "$PR_URL" \
             --button "打开 PR 并合并"
 
-      - name: Case B — Open Draft PR & Dispatch Google Jules (on Conflict or Build Failure)
-        if: ${{ inputs.test_feishu != true && steps.sync.outputs.has_changes == 'true' && (steps.sync.outputs.conflict_count != '0' || steps.build.outputs.build_ok != 'true') }}
-        id: conflict_flow
+      - name: Case B — Open Draft PR & Notify Feishu (Red) on Conflict or Build Failure
+        if: ${{ inputs.test_feishu != true && steps.sync.outputs.has_changes == 'true' && steps.dedup.outputs.skip != 'true' && (steps.sync.outputs.conflict_count != '0' || steps.build.outputs.build_ok != 'true') }}
         env:
           GH_TOKEN: ${{ github.token }}
           BRANCH: ${{ steps.sync.outputs.branch_name }}
           NEW_TAG: ${{ steps.sync.outputs.new_tag }}
+          NEW_WEB_COMMIT: ${{ steps.sync.outputs.new_web_commit }}
           CONFLICTS: ${{ steps.sync.outputs.conflicts_list }}
           BUILD_OK: ${{ steps.build.outputs.build_ok }}
-          JULES_API_KEY: ${{ secrets.JULES_API_KEY }}
-          SYNC_BRANCH: ${{ steps.sync.outputs.branch_name }}
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
           FEISHU_WEBHOOK_SECRET: ${{ secrets.FEISHU_WEBHOOK_SECRET }}
         run: |
@@ -160,12 +183,20 @@ jobs:
             echo "- 合并冲突数：**${{ steps.sync.outputs.conflict_count }}** ${CONFLICTS:+(\`$CONFLICTS\`)}"
             echo "- \`npm run build\` 通过：**$BUILD_OK**"
             echo ""
+            echo "### 本地快速处理"
+            echo '```bash'
+            echo "git fetch origin $BRANCH && git checkout $BRANCH"
+            echo "# 解决冲突或适配协议后运行 npm run build 并推送"
+            echo '```'
+            echo ""
             echo "<details><summary>构建日志 (.sync-tmp/build.log)</summary>"
             echo ""
             echo '```text'
             tail -n 80 .sync-tmp/build.log || true
             echo '```'
             echo "</details>"
+            echo ""
+            echo "<!-- upstream-web-commit: $NEW_WEB_COMMIT -->"
           } > .sync-tmp/pr-body.md
 
           PR_URL=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url // empty')
@@ -182,27 +213,9 @@ jobs:
           fi
           gh pr edit "$PR_URL" --add-assignee "${{ github.repository_owner }}" || true
 
-          # Attempt Google Jules auto-adaptation if JULES_API_KEY is configured
-          node scripts/dispatch-jules.mjs
-
-          JULES_OK=$(grep '^jules_dispatched=' "$GITHUB_OUTPUT" | tail -n 1 | cut -d= -f2- || echo "false")
-          JULES_URL=$(grep '^jules_url=' "$GITHUB_OUTPUT" | tail -n 1 | cut -d= -f2- || echo "")
-
-          if [ "$JULES_OK" = "true" ]; then
-            gh pr comment "$PR_URL" --body "已自动派发 Google Jules 处理冲突与协议适配：$JULES_URL" || true
-            node scripts/notify-feishu.mjs \
-              --status jules \
-              --title "DeskPal 协议/代码冲突 · 已派发 Google Jules 适配 ($NEW_TAG)" \
-              --body "三方合并检测到冲突或编译报错，已自动唤醒 **Google Jules** 在分支 \`$BRANCH\` 上进行适配修复。\n\n- 冲突文件数：${{ steps.sync.outputs.conflict_count }}\n- 构建状态：\`$BUILD_OK\`\n- Jules 完成并提 PR 后，CI 会再次验证并推绿色通知给你。" \
-              --url "$JULES_URL" \
-              --button "查看 Jules 进度" \
-              --url2 "$PR_URL" \
-              --button2 "查看草稿 PR"
-          else
-            node scripts/notify-feishu.mjs \
-              --status error \
-              --title "DeskPal 上游同步存在冲突 · 需人工介入 ($NEW_TAG)" \
-              --body "上游 \`DeskPal\` 有新变更，自动合并出现冲突或类型报错（未启用或调用 Jules 失败）。\n\n- 冲突文件：\`${CONFLICTS:-无（仅构建报错）}\`\n- 构建状态：\`$BUILD_OK\`\n- 请打开草稿 PR 查看 diff 与报错日志。" \
-              --url "$PR_URL" \
-              --button "查看草稿 PR"
-          fi
+          node scripts/notify-feishu.mjs \
+            --status error \
+            --title "DeskPal 上游同步存在冲突 · 需手动适配 ($NEW_TAG)" \
+            --body "上游 \`DeskPal\` 有新变更，自动三方合并出现冲突或类型报错。\n\n- 同步分支：\`$BRANCH\`\n- 冲突文件：\`${CONFLICTS:-无（仅构建报错）}\`\n- 构建状态：\`$BUILD_OK\`\n- 同一提交后续巡检不会重复打扰，请拉取该分支解决冲突并推送。" \
+            --url "$PR_URL" \
+            --button "查看草稿 PR"

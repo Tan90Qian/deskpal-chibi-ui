@@ -31,26 +31,23 @@ jobs:
         run: npm ci --no-fund --no-audit
 
       - name: Typecheck & Build
-        id: build
         run: npm run build
 
-      - name: Notify Feishu on Adaptation PR Ready
-        if: ${{ success() && !github.event.pull_request.draft && (startsWith(github.head_ref, 'jules') || contains(github.head_ref, 'jules') || contains(github.event.pull_request.user.login, 'jules') || contains(join(github.event.pull_request.labels.*.name, ','), 'jules')) }}
+      - name: Notify Feishu When Updated Sync PR Passes Build
+        if: ${{ success() && (github.event.action == 'synchronize' || github.event.action == 'ready_for_review') && (startsWith(github.head_ref, 'sync/') || contains(join(github.event.pull_request.labels.*.name, ','), 'upstream-sync')) }}
         env:
-          GH_TOKEN: ${{ github.token }}
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
           FEISHU_WEBHOOK_SECRET: ${{ secrets.FEISHU_WEBHOOK_SECRET }}
         run: |
-          gh pr edit "${{ github.event.pull_request.html_url }}" --add-reviewer "${{ github.repository_owner }}" || true
           node scripts/notify-feishu.mjs \
             --status ready \
-            --title "DeskPal · Jules 适配 PR 构建通过，等待合并" \
-            --body "PR #${{ github.event.pull_request.number }}：**${{ github.event.pull_request.title }}**\n\n- \`tsc --noEmit && vite build\` 已通过 ✅\n- 请点击下方按钮审阅变更并合并。" \
+            --title "DeskPal · 同步 PR #${{ github.event.pull_request.number }} 构建通过，可合并" \
+            --body "PR **${{ github.event.pull_request.title }}** 最新提交已通过 \`tsc --noEmit && vite build\` 校验 ✅\n\n- 合并到 \`main\` 后将自动打包发布新版 Release。" \
             --url "${{ github.event.pull_request.html_url }}" \
             --button "打开 PR 并合并"
 
       - name: Notify Feishu on PR Build Failure
-        if: ${{ failure() && !github.event.pull_request.draft && (startsWith(github.head_ref, 'sync/') || startsWith(github.head_ref, 'jules') || contains(github.head_ref, 'jules') || contains(join(github.event.pull_request.labels.*.name, ','), 'upstream-sync')) }}
+        if: ${{ failure() && !github.event.pull_request.draft && (startsWith(github.head_ref, 'sync/') || contains(join(github.event.pull_request.labels.*.name, ','), 'upstream-sync')) }}
         env:
           FEISHU_WEBHOOK_URL: ${{ secrets.FEISHU_WEBHOOK_URL }}
           FEISHU_WEBHOOK_SECRET: ${{ secrets.FEISHU_WEBHOOK_SECRET }}

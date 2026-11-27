@@ -20,14 +20,13 @@ permissions:
 
 jobs:
   build-and-release:
-    # Run on tag push, manual dispatch, or when an upstream-sync / Jules PR is merged into main
+    # Run on tag push, manual dispatch, or when an upstream-sync PR is merged into main
     if: >-
       github.event_name != 'pull_request' ||
       (
         github.event.pull_request.merged == true &&
         (
           startsWith(github.event.pull_request.head.ref, 'sync/') ||
-          contains(github.event.pull_request.head.ref, 'jules') ||
           contains(join(github.event.pull_request.labels.*.name, ','), 'upstream-sync')
         )
       )

@@ -20,7 +20,7 @@ function parseArgs(argv) {
 
 const TEMPLATES = {
   ready: "green",
-  jules: "orange",
+  warn: "orange",
   error: "red",
   released: "blue",
   info: "wathet",

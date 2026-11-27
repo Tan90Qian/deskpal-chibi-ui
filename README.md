@@ -69,9 +69,9 @@ node scripts/sync-chibi-assets.mjs <path-to-crosspet>/characters
 由于上游 DeskPal 迭代期间暂不承诺向后兼容，本仓库内置了自动追踪同步与客户端版本护栏：
 
 - **客户端版本护栏**：安装包内置 `tools/manifest.json` 记录已验证适配的 DeskPal 版本（来自 `.upstream-sync.json`），`一键安装皮肤.cmd` 安装前会自动比对本机 `DeskPal.exe` 版本并在跨版本时提醒。
-- **自动巡检 + 三方合并**（`.github/workflows/sync-upstream.yml`）：每 6 小时检查 `HuLuShiLei/DeskPal` 的 `src/DeskPal.Client/web/**` 变更并自动执行三方合并 + `tsc --noEmit && vite build` 校验：
+- **自动巡检 + 三方合并**（`.github/workflows/sync-upstream.yml`）：每 6 小时检查 `HuLuShiLei/DeskPal` 的 `src/DeskPal.Client/web/**` 变更并自动执行三方合并 + `tsc --noEmit && vite build` 校验（内置按提交去重，同一上游提交已有未合并 PR 时自动跳过，不重复刷屏）：
   - **无冲突且构建通过**：自动创建 PR 并推送 **飞书绿色卡片**，手机点开即可合并；
-  - **存在冲突或协议变动报错**：自动创建草稿 PR，若配置了 `JULES_API_KEY` 则自动派发 **Google Jules** 适配修复并推送 **飞书橙色卡片**；否则推送 **飞书红色卡片** 提醒人工处理。
+  - **存在冲突或协议变动报错**：自动创建草稿 PR 并推送 **飞书红色卡片** 提醒拉取分支适配，修好推送后 CI 通过再次推 **飞书绿色卡片**。
 - **合并即自动发版**（`.github/workflows/release.yml`）：将同步 PR 合并到 `main`（或手动推送 `v*` 标签）后，自动打版本 tag、打包 Windows 一键安装包、发布 GitHub Release，并推送 **飞书蓝色发版通知**。
 
 ### 仓库 Secrets 配置（Settings → Secrets and variables → Actions）
@@ -80,7 +80,6 @@ node scripts/sync-chibi-assets.mjs <path-to-crosspet>/characters
 | :--- | :---: | :--- |
 | `FEISHU_WEBHOOK_URL` | 推荐 | 飞书群自定义机器人 Webhook 地址（若开启自定义关键词校验，请设置关键词为 `DeskPal`） |
 | `FEISHU_WEBHOOK_SECRET` | 可选 | 飞书机器人「签名校验」密钥（开启签名校验时填写） |
-| `JULES_API_KEY` | 可选 | [Google Jules](https://jules.google.com) API Key（需先给仓库授权 Jules GitHub App） |
 
 > 推送仓库后，可在 GitHub Actions 页面手动运行 **Sync Upstream DeskPal** 并勾选 **`test_feishu`**，一键验证飞书卡片推送是否连通。
 
